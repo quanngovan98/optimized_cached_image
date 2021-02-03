@@ -17,7 +17,7 @@ dependencies:
   pedantic: ^1.5.0
   flutter_blurhash: ">=0.4.1 <0.6.0"
   sprintf: ^4.0.0
-  octo_image: ">=0.1.0 <0.3.0"
+  octo_image: ">=0.1.0 <=0.3.0"
 
 
 dev_dependencies:
