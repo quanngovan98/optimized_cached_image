@@ -15,7 +15,7 @@ import 'transformer/image_transformer.dart';
 class ImageCacheManager extends BaseCacheManager {
   final ImageCacheConfig cacheConfig;
   final ImageTransformer transformer;
-
+  final String cacheKey;
   @override
   Future<String> getFilePath() async {
     if (cacheConfig.storagePath != null) {
@@ -35,12 +35,12 @@ class ImageCacheManager extends BaseCacheManager {
   /// this implementation can be used as inspiration for more complex cache
   /// managers.
   factory ImageCacheManager(
-      {ImageCacheConfig cacheConfig, ImageTransformer transformer}) {
+      {ImageCacheConfig cacheConfig, ImageTransformer transformer, String cacheKey}) {
     if (_instance == null) {
       final config = cacheConfig ?? ImageCacheConfig();
       Logger.enableLogging = config.enableLog;
       _instance = ImageCacheManager._(
-          config, transformer ?? DefaultImageTransformer(config));
+          config, transformer ?? DefaultImageTransformer(config), cacheKey);
     }
     return _instance;
   }
@@ -53,7 +53,7 @@ class ImageCacheManager extends BaseCacheManager {
         cacheConfig: cacheConfig, transformer: transformer);
   }
 
-  ImageCacheManager._(this.cacheConfig, this.transformer) : super(key);
+  ImageCacheManager._(this.cacheConfig, this.transformer, this.cacheKey) : super(key);
 
   ///Download the file and add to cache
   @override
@@ -72,8 +72,8 @@ class ImageCacheManager extends BaseCacheManager {
       FileInfo response, String url, String parentUrl) async {
     final scaledResponse = await transformer.transform(response, url);
     if (scaledResponse.file.path != response.file.path) {
-      final orgCacheObject = await store.retrieveCacheData('$parentUrl${cacheConfig.widthKey}${cacheConfig.heightKey}');
-      store.putFile(CacheObject('$url${cacheConfig.widthKey}${cacheConfig.heightKey}',
+      final orgCacheObject = await store.retrieveCacheData('$parentUrl${cacheKey??''}');
+      store.putFile(CacheObject('$url${cacheKey??''}',
           relativePath: p.basename(scaledResponse.file.path),
           validTill: orgCacheObject.validTill,
           eTag: orgCacheObject.eTag));

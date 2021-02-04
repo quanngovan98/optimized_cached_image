@@ -70,6 +70,8 @@ class OptimizedCacheImage extends StatelessWidget {
   /// also affected by the scale factor.
   final double height;
 
+  final String cacheKey;
+
   /// How to inscribe the image into the space allocated during layout.
   ///
   /// The default varies based on the other fields. See the discussion at
@@ -159,6 +161,7 @@ class OptimizedCacheImage extends StatelessWidget {
 
   OptimizedCacheImage({
     Key key,
+    this.cacheKey,
     @required this.imageUrl,
     this.httpHeaders,
     this.imageBuilder,
@@ -301,6 +304,6 @@ class OptimizedCacheImage extends StatelessWidget {
   }
 
   BaseCacheManager getCacheManager() => useScaleCacheManager
-      ? ImageCacheManager()
+      ? ImageCacheManager(cacheKey: cacheKey)
       : (cacheManager ?? DefaultCacheManager());
 }
