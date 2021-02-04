@@ -72,8 +72,8 @@ class ImageCacheManager extends BaseCacheManager {
       FileInfo response, String url, String parentUrl) async {
     final scaledResponse = await transformer.transform(response, url);
     if (scaledResponse.file.path != response.file.path) {
-      final orgCacheObject = await store.retrieveCacheData(parentUrl);
-      store.putFile(CacheObject(url,
+      final orgCacheObject = await store.retrieveCacheData('$parentUrl${cacheConfig.widthKey}${cacheConfig.heightKey}');
+      store.putFile(CacheObject('$url${cacheConfig.widthKey}${cacheConfig.heightKey}',
           relativePath: p.basename(scaledResponse.file.path),
           validTill: orgCacheObject.validTill,
           eTag: orgCacheObject.eTag));

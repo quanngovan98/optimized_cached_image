@@ -195,8 +195,18 @@ class OptimizedCacheImage extends StatelessWidget {
         assert(useScaleCacheManager != null),
         super(key: key);
 
+  void _checkMemory() {
+    ImageCache _imageCache = PaintingBinding.instance.imageCache;
+    if (_imageCache.currentSizeBytes >= 55 << 20 ||
+        _imageCache.currentSize >= 10) {
+      _imageCache.clear();
+      _imageCache.clearLiveImages();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _checkMemory();
     return LayoutBuilder(builder: (ctx, constraints) {
       if (width != null || height != null) {
         constraints = BoxConstraints(
