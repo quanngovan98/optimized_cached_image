@@ -69,10 +69,10 @@ class DefaultImageTransformer extends ImageTransformer {
       log("Dimensions width=${scaleInfo.width}, height=${scaleInfo.height}, format ${scaleInfo.compressFormat}");
       resizedFile = await FlutterImageCompress.compressAndGetFile(
           file.path, scaleInfo.file.path,
-          minWidth: scaleInfo.width,
-          minHeight: scaleInfo.height,
+          minWidth: scaleInfo.width * 2,
+          minHeight: scaleInfo.height * 2,
           format: scaleInfo.compressFormat,
-          quality: 90);
+          quality: 100);
       if (resizedFile != null && resizedFile.existsSync()) {
         if (resizedFile.lengthSync() < srcSize) {
           log("Resized success ${fileInfo.originalUrl}");
